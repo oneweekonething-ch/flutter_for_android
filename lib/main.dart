@@ -19,28 +19,60 @@ class SampleAppPage extends StatefulWidget {
   SampleAppPage({Key? key}) : super(key: key);
 
   @override
-  _XmlAppPageState createState() {
-    return new _XmlAppPageState();
+  _SampleAppPageState createState() {
+    return new _SampleAppPageState();
   }
 }
 
-class _XmlAppPageState extends State {
+class _SampleAppPageState extends State<SampleAppPage> {
+  bool toggle = true;
+
+  void _toggle() {
+    setState(() {
+      toggle = !toggle;
+    });
+  }
+
+  _getToggleChild() {
+    if (toggle) {
+      return new Text("Toggle One");
+    } else {
+      return new MaterialButton(
+          onPressed: () {}, child: new Text("Toggle Two"));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("Xml app")),
-      body: new Center(
-        child: new MaterialButton(
-          color: Colors.blue,
-          textColor: Colors.white,
-          onPressed: () {},
-          child: new Text("hello xml"),
-          padding: new EdgeInsets.only(left: 10.0, right: 10.0),
-        ),
+      appBar: new AppBar(title: new Text("Sample app")),
+      body: new Center(child: _getToggleChild()),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: _toggle,
+        tooltip: 'toggle',
+        child: new Icon(Icons.update),
       ),
     );
   }
 }
+
+// class _XmlAppPageState extends State {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Scaffold(
+//       appBar: new AppBar(title: new Text("Xml app")),
+//       body: new Center(
+//         child: new MaterialButton(
+//           color: Colors.blue,
+//           textColor: Colors.white,
+//           onPressed: () {},
+//           child: new Text("hello xml"),
+//           padding: new EdgeInsets.only(left: 10.0, right: 10.0),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 //
 // class _SampleAppPageState extends State<SampleAppPage> {
