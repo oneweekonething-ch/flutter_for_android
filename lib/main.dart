@@ -1,58 +1,117 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(new FadeApp());
+  runApp(new MaterialApp(home: new DemoApp()));
 }
 
-class FadeApp extends StatelessWidget {
+class DemoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: "Fade app",
-        theme: new ThemeData(primaryColor: Colors.blue),
-        home: new FadeAppPage(title: "Fade demo"));
+    return new Scaffold(body: new Signature());
   }
 }
 
-class FadeAppPage extends StatefulWidget {
-  FadeAppPage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
+class Signature extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new _FadeAppPage();
+    return new SignatureState();
   }
 }
 
-class _FadeAppPage extends State<FadeAppPage> with TickerProviderStateMixin {
-  late AnimationController controller;
-  late CurvedAnimation curve;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = new AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
-    curve = new CurvedAnimation(parent: controller, curve: Curves.easeIn);
-  }
+class SignatureState extends State<Signature> {
+  List<Offset> _points = <Offset>[];
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(title: new Text(widget.title)),
-      body: new Center(
-          child: new Container(
-              child: new FadeTransition(
-                  opacity: curve, child: new FlutterLogo(size: 100.0)))),
-      floatingActionButton: new FloatingActionButton(
-          tooltip: "Fade",
-          child: new Icon(Icons.brush),
-          onPressed: () {
-            controller.forward();
-          }),
-    );
+    return new GestureDetector(
+        onPanUpdate: (DragUpdateDetails detail) {
+          setState(() {
+            RenderBox referenceBox = context.findRenderObject() as RenderBox;
+            Offset localPosition =
+                referenceBox.globalToLocal(detail.globalPosition);
+            _points = new List.from(_points)..add(localPosition);
+          });
+        },
+        onPanEnd: (DragEndDetails details) {
+          // _points.add(null);
+        },
+        child: new CustomPaint(
+          painter: new SignaturePainter(_points),
+        ));
   }
 }
+
+class SignaturePainter extends CustomPainter {
+  SignaturePainter(this.points);
+
+  final List<Offset> points;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = new Paint()
+      ..color = Colors.black
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 5.0;
+    for (int i = 0; i < points.length - 1; i++) {
+      canvas.drawLine(points[i], points[i + 1], paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant SignaturePainter other) {
+    return other.points != points;
+  }
+}
+
+// class FadeApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new MaterialApp(
+//         title: "Fade app",
+//         theme: new ThemeData(primaryColor: Colors.blue),
+//         home: new FadeAppPage(title: "Fade demo"));
+//   }
+// }
+//
+// class FadeAppPage extends StatefulWidget {
+//   FadeAppPage({Key? key, required this.title}) : super(key: key);
+//   final String title;
+//
+//   @override
+//   State<StatefulWidget> createState() {
+//     return new _FadeAppPage();
+//   }
+// }
+//
+// class _FadeAppPage extends State<FadeAppPage> with TickerProviderStateMixin {
+//   late AnimationController controller;
+//   late CurvedAnimation curve;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     controller = new AnimationController(
+//         duration: const Duration(milliseconds: 2000), vsync: this);
+//     curve = new CurvedAnimation(parent: controller, curve: Curves.easeIn);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Scaffold(
+//       appBar: new AppBar(title: new Text(widget.title)),
+//       body: new Center(
+//           child: new Container(
+//               child: new FadeTransition(
+//                   opacity: curve, child: new FlutterLogo(size: 100.0)))),
+//       floatingActionButton: new FloatingActionButton(
+//           tooltip: "Fade",
+//           child: new Icon(Icons.brush),
+//           onPressed: () {
+//             controller.forward();
+//           }),
+//     );
+//   }
+// }
 
 // class SampleApp extends StatelessWidget {
 //   @override
