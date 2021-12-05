@@ -1,60 +1,110 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(new SampleApp());
+  runApp(new FadeApp());
 }
 
-class SampleApp extends StatelessWidget {
+class FadeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: "Sample App",
-      theme: new ThemeData(primaryColor: Colors.blue),
-      home: new SampleAppPage(),
-    );
+        title: "Fade app",
+        theme: new ThemeData(primaryColor: Colors.blue),
+        home: new FadeAppPage(title: "Fade demo"));
   }
 }
 
-class SampleAppPage extends StatefulWidget {
-  SampleAppPage({Key? key}) : super(key: key);
+class FadeAppPage extends StatefulWidget {
+  FadeAppPage({Key? key, required this.title}) : super(key: key);
+  final String title;
 
   @override
-  _SampleAppPageState createState() {
-    return new _SampleAppPageState();
+  State<StatefulWidget> createState() {
+    return new _FadeAppPage();
   }
 }
 
-class _SampleAppPageState extends State<SampleAppPage> {
-  bool toggle = true;
+class _FadeAppPage extends State<FadeAppPage> with TickerProviderStateMixin {
+  late AnimationController controller;
+  late CurvedAnimation curve;
 
-  void _toggle() {
-    setState(() {
-      toggle = !toggle;
-    });
-  }
-
-  _getToggleChild() {
-    if (toggle) {
-      return new Text("Toggle One");
-    } else {
-      return new MaterialButton(
-          color: Colors.blue, onPressed: () {}, child: new Text("Toggle Two"));
-    }
+  @override
+  void initState() {
+    super.initState();
+    controller = new AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);
+    curve = new CurvedAnimation(parent: controller, curve: Curves.easeIn);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("Sample app")),
-      body: new Center(child: _getToggleChild()),
+      appBar: new AppBar(title: new Text(widget.title)),
+      body: new Center(
+          child: new Container(
+              child: new FadeTransition(
+                  opacity: curve, child: new FlutterLogo(size: 100.0)))),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _toggle,
-        tooltip: 'toggle',
-        child: new Icon(Icons.update),
-      ),
+          tooltip: "Fade",
+          child: new Icon(Icons.brush),
+          onPressed: () {
+            controller.forward();
+          }),
     );
   }
 }
+
+// class SampleApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new MaterialApp(
+//       title: "Sample App",
+//       theme: new ThemeData(primaryColor: Colors.blue),
+//       home: new SampleAppPage(),
+//     );
+//   }
+// }
+//
+// class SampleAppPage extends StatefulWidget {
+//   SampleAppPage({Key? key}) : super(key: key);
+//
+//   @override
+//   _SampleAppPageState createState() {
+//     return new _SampleAppPageState();
+//   }
+// }
+//
+// class _SampleAppPageState extends State<SampleAppPage> {
+//   bool toggle = true;
+//
+//   void _toggle() {
+//     setState(() {
+//       toggle = !toggle;
+//     });
+//   }
+//
+//   _getToggleChild() {
+//     if (toggle) {
+//       return new Text("Toggle One");
+//     } else {
+//       return new MaterialButton(
+//           color: Colors.blue, onPressed: () {}, child: new Text("Toggle Two"));
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Scaffold(
+//       appBar: new AppBar(title: new Text("Sample app")),
+//       body: new Center(child: _getToggleChild()),
+//       floatingActionButton: new FloatingActionButton(
+//         onPressed: _toggle,
+//         tooltip: 'toggle',
+//         child: new Icon(Icons.update),
+//       ),
+//     );
+//   }
+// }
 
 // class _XmlAppPageState extends State {
 //   @override
