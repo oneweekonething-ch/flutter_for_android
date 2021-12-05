@@ -38,7 +38,7 @@ class _SampleAppPageState extends State<SampleAppPage> {
       return new Text("Toggle One");
     } else {
       return new MaterialButton(
-          onPressed: () {}, child: new Text("Toggle Two"));
+          color: Colors.blue, onPressed: () {}, child: new Text("Toggle Two"));
     }
   }
 
