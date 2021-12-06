@@ -26,28 +26,59 @@ class SampleAppPage extends StatefulWidget {
 }
 
 class _SampleAppPageSate extends State<SampleAppPage> {
+  List<Widget> widgets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < 100; i++) {
+      widgets.add(getRow(i));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(title: new Text("Sample App")),
-        body: new ListView(children: _getListData()));
+        body: new ListView(children: widgets));
   }
 
-  _getListData() {
-    List<Widget> widgets = [];
-    for (int i = 0; i < 100; i++) {
-      // widgets.add(new Padding(
-      //     padding: new EdgeInsets.all(10.0), child: new Text("Row $i")));
-      widgets.add(new GestureDetector(
-          child: new Padding(
-              padding: new EdgeInsets.all(10.0), child: new Text("Row $i")),
-          onTap: () {
-            print("onTap $i");
-          }));
-    }
-    return widgets;
+  Widget getRow(int i) {
+    return new GestureDetector(
+        child: new Padding(
+            padding: new EdgeInsets.all(10.0), child: new Text("Row $i")),
+        onTap: () {
+          setState(() {
+            widgets = new List.from(widgets);
+            widgets.add(getRow(widgets.length + 1));
+          });
+        });
   }
 }
+
+// class _SampleAppPageSate extends State<SampleAppPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Scaffold(
+//         appBar: new AppBar(title: new Text("Sample App")),
+//         body: new ListView(children: _getListData()));
+//   }
+//
+//   _getListData() {
+//     List<Widget> widgets = [];
+//     for (int i = 0; i < 100; i++) {
+//       // widgets.add(new Padding(
+//       //     padding: new EdgeInsets.all(10.0), child: new Text("Row $i")));
+//       widgets.add(new GestureDetector(
+//           child: new Padding(
+//               padding: new EdgeInsets.all(10.0), child: new Text("Row $i")),
+//           onTap: () {
+//             print("onTap $i");
+//           }));
+//     }
+//     return widgets;
+//   }
+// }
 
 // class SampleApp extends StatelessWidget {
 //   @override
