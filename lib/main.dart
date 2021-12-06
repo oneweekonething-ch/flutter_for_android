@@ -36,8 +36,14 @@ class _SampleAppPageSate extends State<SampleAppPage> {
   _getListData() {
     List<Widget> widgets = [];
     for (int i = 0; i < 100; i++) {
-      widgets.add(new Padding(
-          padding: new EdgeInsets.all(10.0), child: new Text("Row $i")));
+      // widgets.add(new Padding(
+      //     padding: new EdgeInsets.all(10.0), child: new Text("Row $i")));
+      widgets.add(new GestureDetector(
+          child: new Padding(
+              padding: new EdgeInsets.all(10.0), child: new Text("Row $i")),
+          onTap: () {
+            print("onTap $i");
+          }));
     }
     return widgets;
   }
