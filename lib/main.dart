@@ -40,7 +40,12 @@ class _SampleAppPageSate extends State<SampleAppPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(title: new Text("Sample App")),
-        body: new ListView(children: widgets));
+        body: new ListView.builder(
+            itemCount: widgets.length,
+            itemBuilder: (BuildContext context, int position) {
+              return getRow(position);
+            }));
+    // body: new ListView(children: widgets));
   }
 
   Widget getRow(int i) {
